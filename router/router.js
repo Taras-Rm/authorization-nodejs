@@ -18,6 +18,7 @@ router.post(
   ],
   authController.registration
 );
+
 router.post(
   "/login",
   [

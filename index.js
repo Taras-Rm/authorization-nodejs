@@ -8,7 +8,6 @@ const DB_URL = process.env.DB_KEY
 
 const app = express()
 
-
 app.use(express.json())
 app.use("/auth", router)
 

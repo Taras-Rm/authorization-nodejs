@@ -5,6 +5,7 @@ const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 
 class AuthController {
+  
   async registration(req, res) {
     try {
       const errors = validationResult(req);
@@ -37,6 +38,12 @@ class AuthController {
 
   async login(req, res) {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res
+          .status(400)
+          .json({ message: "Validation error", error: errors });
+      }
       const { username, password } = req.body;
       const user = await User.findOne({ username });
       if (!user) {
@@ -68,13 +75,11 @@ class AuthController {
 }
 
 async function hashPassword(password) {
-  const hash = await bcrypt.hash(password, 5);
-  return hash;
+  return await bcrypt.hash(password, 5);
 }
 
 async function comparePassword(password, hashedPassword) {
-  const match = await bcrypt.compare(password, hashedPassword);
-  return match;
+  return await bcrypt.compare(password, hashedPassword);
 }
 
 function generateAccessToken(id, roles) {
